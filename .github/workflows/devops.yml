@@ -93,3 +93,24 @@ jobs:
           echo "Repo: $GITHUB_REPOSITORY"
           echo "Evento: $GITHUB_EVENT_NAME"
           echo "Runner: $RUNNER_OS"
+  deploy:
+    needs: docs
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-zip
+          path: release
+
+      - name: Show package
+        run: |
+          echo "Archivos listos para deploy:"
+          ls -la release
+
+      - name: Deploy simulation
+        run: |
+          echo "Deploying app to production..."
+          echo "Deploy finalizado correctamente"
